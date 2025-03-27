@@ -1,4 +1,4 @@
-import { status } from "@/types/status";
+import { tokenStatus } from "@/types/tokenStatus";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
@@ -14,17 +14,18 @@ export const fetchToken = createAsyncThunk("api/fetchToken", async () => {
 });
 
 export const removeToken = createAsyncThunk("api/removeToken", async () => {
-  const response = await AsyncStorage.removeItem("token");
+  await AsyncStorage.removeItem("token");
+  return "";
 });
 
 interface tokenState {
   value: string;
-  status: status;
+  status: tokenStatus;
 }
 
 const initialState: tokenState = {
   value: "",
-  status: status.idle,
+  status: tokenStatus.idle,
 };
 
 // Then, handle actions in your reducers:
@@ -40,23 +41,23 @@ export const tokenSlice = createSlice({
       .addCase(fetchToken.fulfilled, (state, action) => {
         // Add user to the state array
         state.value = action.payload;
-        state.status = status.succeeded;
+        state.status = tokenStatus.succeeded;
       })
       .addCase(fetchToken.pending, (state) => {
-        state.status = status.pending;
+        state.status = tokenStatus.pending;
       })
       .addCase(fetchToken.rejected, (state) => {
-        state.status = status.failed;
+        state.status = tokenStatus.failed;
       })
-      .addCase(removeToken.fulfilled, (state) => {
-        state.value = "";
-        state.status = status.succeeded;
+      .addCase(removeToken.fulfilled, (state, action) => {
+        state.value = action.payload;
+        state.status = tokenStatus.deleted;
       })
       .addCase(removeToken.pending, (state) => {
-        state.status = status.pending;
+        state.status = tokenStatus.pending;
       })
       .addCase(removeToken.rejected, (state) => {
-        state.status = status.failed;
+        state.status = tokenStatus.failed;
       });
   },
 });
