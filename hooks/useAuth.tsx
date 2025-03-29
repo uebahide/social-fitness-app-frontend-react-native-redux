@@ -19,17 +19,17 @@ export const useAuth = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const authenticate = async (mode: modeType) => {
-    try {
-      const URL =
-        mode === "register" ? `${API_URL}/register` : `${API_URL}/login`;
-      const payload =
-        mode === "register"
-          ? { name, email, password, password_confirmation }
-          : {
-              email,
-              password,
-            };
+    const URL =
+      mode === "register" ? `${API_URL}/register` : `${API_URL}/login`;
+    const payload =
+      mode === "register"
+        ? { name, email, password, password_confirmation }
+        : {
+            email,
+            password,
+          };
 
+    try {
       const res = await axios.post<userData>(URL, payload);
       await AsyncStorage.setItem("token", res.data.token);
       setErrorMessage("");

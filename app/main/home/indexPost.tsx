@@ -1,9 +1,9 @@
-import { View, Text, Pressable, SafeAreaView, FlatList } from "react-native";
+import { Text, Pressable, SafeAreaView, FlatList } from "react-native";
 import { useFocusEffect, useRouter } from "expo-router";
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/app/store";
-import { fetchPost } from "@/slices/api/postSlice";
+import { fetchPosts } from "@/slices/api/postSlice";
 import { PostCard } from "@/components/organisms/postCard";
 
 const indexPost = () => {
@@ -16,7 +16,7 @@ const indexPost = () => {
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(fetchPost());
+      dispatch(fetchPosts());
       return () => {
         // Do something when the screen is unfocused
         // Useful for cleanup functions

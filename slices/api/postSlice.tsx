@@ -7,8 +7,8 @@ import { post } from "@/types/post";
 import { status } from "@/types/status";
 
 // First, create the thunk
-export const fetchPost = createAsyncThunk(
-  "api/fetchPost",
+export const fetchPosts = createAsyncThunk(
+  "api/fetchPostss",
   async (_, { rejectWithValue }) => {
     const token = store.getState().token.value;
     try {
@@ -43,15 +43,15 @@ export const postSlice = createSlice({
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder
-      .addCase(fetchPost.fulfilled, (state, action) => {
+      .addCase(fetchPosts.fulfilled, (state, action) => {
         // Add user to the state array
         state.value = action.payload;
         state.status = status.succeeded;
       })
-      .addCase(fetchPost.pending, (state) => {
+      .addCase(fetchPosts.pending, (state) => {
         state.status = status.pending;
       })
-      .addCase(fetchPost.rejected, (state) => {
+      .addCase(fetchPosts.rejected, (state) => {
         state.status = status.failed;
       });
   },
