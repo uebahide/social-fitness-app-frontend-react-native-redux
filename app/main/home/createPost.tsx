@@ -1,75 +1,32 @@
 import { PrimaryButton } from "@/components/atoms/buttons/primaryButton";
-import axios from "axios";
-import { useState } from "react";
 import { View, Text, TextInput, Keyboard } from "react-native";
-import { API_URL } from "@/constants";
-import { useSelector } from "react-redux";
-import { RootState } from "@/app/store";
-import { useRouter } from "expo-router";
+import { usePost } from "@/hooks/usePost";
 
-const createPost = () => {
-  const [title, setTitle] = useState<string>("");
-  const [count, setcount] = useState<string>("");
-  const [timeHour, setTimeHour] = useState<string>("");
-  const [timeMinute, setTimeMinute] = useState<string>("");
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const token = useSelector((state: RootState) => state.token.value);
-  const router = useRouter();
+const CreatePost = () => {
+  const {
+    createPost,
+    title,
+    count,
+    timeHour,
+    timeMinute,
+    setTitle,
+    setCount,
+    setTimeHour,
+    setTimeMinute,
+    errorMessage,
+  } = usePost();
 
   const onChangeTitle = (s: string) => {
     setTitle(s);
   };
   const onChangecount = (s: string) => {
-    setcount(s);
+    setCount(s);
   };
   const onChangeTimeHour = (s: string) => {
     setTimeHour(s);
   };
   const onChangeTimeMin = (s: string) => {
     setTimeMinute(s);
-  };
-
-  const onPressCreate = async () => {
-    try {
-      const res = await axios({
-        method: "post",
-        url: `${API_URL}/posts`,
-        data: {
-          title: title,
-          count: count,
-          time_hour: timeHour,
-          time_minute: timeMinute,
-        },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      setErrorMessage("");
-      router.back();
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          console.log("Error response status:", error.response.status);
-          console.log("Error response data:", error.response.data);
-          console.log("Error response headers:", error.response.headers);
-          setErrorMessage(error.response.data.message);
-        } else if (error.request) {
-          console.log("Error request:", error.request);
-          setErrorMessage("server error");
-        } else {
-          console.log("Error message:", error.message);
-          setErrorMessage("");
-        }
-      } else if (error instanceof Error) {
-        console.error("General error:", error.message);
-        setErrorMessage(error.message);
-      } else {
-        console.error("Unknown error:", error);
-        setErrorMessage("An unexpected error occurred.");
-      }
-      return false;
-    }
   };
 
   return (
@@ -107,7 +64,7 @@ const createPost = () => {
       <PrimaryButton
         onPress={() => {
           Keyboard.dismiss();
-          onPressCreate();
+          createPost();
         }}
       >
         Create
@@ -116,4 +73,4 @@ const createPost = () => {
   );
 };
 
-export default createPost;
+export default CreatePost;
