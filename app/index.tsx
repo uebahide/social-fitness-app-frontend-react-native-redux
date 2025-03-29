@@ -1,7 +1,7 @@
 import { Text, View } from "react-native";
 import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { router, useFocusEffect } from "expo-router";
+import { useRouter, useFocusEffect } from "expo-router";
 
 import "../global.css";
 import { PrimaryButton } from "@/components/atoms/buttons/primaryButton";
@@ -11,6 +11,7 @@ import { status } from "@/types/status";
 import { fetchToken } from "@/slices/api/tokenSlice";
 
 export default function Index() {
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const fetchUserStatus = useSelector((state: RootState) => state.user.status);
   const token = useSelector((state: RootState) => state.token.value);
@@ -42,7 +43,7 @@ export default function Index() {
     console.log("before go to home: ", fetchUserStatus);
     if (fetchUserStatus === status.succeeded) {
       console.log("go to home(index.tsx)");
-      router.navigate("/main/home");
+      router.navigate("/main/home/indexPost");
     }
   }, [dispatch, fetchUserStatus]);
 

@@ -1,4 +1,4 @@
-import { Text, View, TextInput } from "react-native";
+import { Text, View, TextInput, Keyboard } from "react-native";
 
 import { PrimaryButton } from "@/components/atoms/buttons/primaryButton";
 import { useAuth } from "@/hooks/useAuth";
@@ -67,7 +67,12 @@ const Signup = () => {
 
       <View className="mt-10 items-center">
         <View className="w-64">
-          <PrimaryButton onPress={() => authenticate("register")}>
+          <PrimaryButton
+            onPress={() => {
+              Keyboard.dismiss();
+              authenticate("register");
+            }}
+          >
             Sign Up
           </PrimaryButton>
         </View>
