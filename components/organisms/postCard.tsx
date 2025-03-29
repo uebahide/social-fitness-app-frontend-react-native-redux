@@ -9,7 +9,6 @@ type PostCardProps = {
 
 export const PostCard: FC<PostCardProps> = memo(({ post }) => {
   const created_at = new Date(post.created_at);
-  const router = useRouter();
   const formattedDate = created_at.toLocaleString("en-US", {
     weekday: "long", // Full weekday name (e.g., "Monday")
     year: "numeric", // Full year (e.g., "2025")
@@ -28,8 +27,8 @@ export const PostCard: FC<PostCardProps> = memo(({ post }) => {
       }}
       asChild
     >
-      <Pressable className="rounded-lg items-center mb-2 py-2 bg-green-100">
-        <Text>{formattedDate}</Text>
+      <Pressable className="rounded-lg items-center mb-2 py-10 bg-green-100">
+        <Text>Post date: {formattedDate}</Text>
         <Text>Title: {post.title}</Text>
         <Text>Count/distance: {post.count}</Text>
         <Text>Hour: {post.time_hour}</Text>

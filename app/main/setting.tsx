@@ -12,8 +12,12 @@ const Setting = () => {
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <View className="gap-y-5 flex-1 mt-3">
-      <Text className="border-b text-xl">User Name &gt; {user.name}</Text>
-      <Text className="border-b text-xl">Email &gt; {user.email}</Text>
+      <Text className="border-b text-xl  color-gray-600">
+        User Name &gt; {user.name}
+      </Text>
+      <Text className="border-b text-xl  color-gray-600">
+        Email &gt; {user.email}
+      </Text>
       {errorMessage ? (
         <Text className="color-red-600">{errorMessage}</Text>
       ) : null}

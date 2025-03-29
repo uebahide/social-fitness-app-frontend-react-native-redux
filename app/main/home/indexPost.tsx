@@ -24,6 +24,22 @@ const indexPost = () => {
     }, [])
   );
 
+  if (posts.length === 0) {
+    return (
+      <SafeAreaView className="p-2 flex-1 bg-blue-100 items-center justify-center">
+        <Text className="color-gray-600">No posts yet</Text>
+        <Pressable
+          className="rounded-full h-[65px] w-[65px] bg-blue-200 absolute right-8 bottom-8 shadow-xl"
+          onPress={onPressCreate}
+        >
+          <Text className="text-5xl text-center leading-[1.5em] text-gray-600 ">
+            +
+          </Text>
+        </Pressable>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView className="p-2 flex-1 bg-blue-100">
       <FlatList
