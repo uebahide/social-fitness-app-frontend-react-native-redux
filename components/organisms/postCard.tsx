@@ -5,9 +5,10 @@ import { Text, Pressable } from "react-native";
 
 type PostCardProps = {
   post: post;
+  permission: "editable" | "uneditable";
 };
 
-export const PostCard: FC<PostCardProps> = memo(({ post }) => {
+export const PostCard: FC<PostCardProps> = memo(({ post, permission }) => {
   const created_at = new Date(post.created_at);
   const formattedDate = created_at.toLocaleString("en-US", {
     weekday: "long", // Full weekday name (e.g., "Monday")
@@ -19,11 +20,23 @@ export const PostCard: FC<PostCardProps> = memo(({ post }) => {
     second: "2-digit", // Second (2 digits, e.g., "15")
   });
 
+  if (permission !== "editable") {
+    return (
+      <Pressable className="rounded-lg items-center mb-2 py-10 bg-green-100">
+        <Text>Post date: {formattedDate}</Text>
+        <Text>Title: {post.title}</Text>
+        <Text>Count/distance: {post.count}</Text>
+        <Text>Hour: {post.time_hour}</Text>
+        <Text>Min: {post.time_minute}</Text>
+      </Pressable>
+    );
+  }
+
   return (
     <Link
       href={{
         pathname: "/main/home/showPost",
-        params: { post_id: post.id },
+        params: { post_id: post.id, permission: permission },
       }}
       asChild
     >

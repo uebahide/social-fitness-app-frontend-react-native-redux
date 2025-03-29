@@ -44,7 +44,9 @@ const indexPost = () => {
     <SafeAreaView className="p-2 flex-1 bg-blue-100">
       <FlatList
         data={posts}
-        renderItem={({ item }) => <PostCard post={item} />}
+        renderItem={({ item }) => (
+          <PostCard post={item} permission="editable" />
+        )}
         keyExtractor={(item) => item.id}
       />
       <Pressable

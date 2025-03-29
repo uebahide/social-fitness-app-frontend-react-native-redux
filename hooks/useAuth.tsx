@@ -57,7 +57,6 @@ export const useAuth = () => {
         console.error("Unknown error:", error);
         setErrorMessage("An unexpected error occurred.");
       }
-      return false;
     }
   };
 

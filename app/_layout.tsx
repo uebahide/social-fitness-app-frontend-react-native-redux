@@ -1,9 +1,9 @@
 // import "../global.css";
+import "react-native-gesture-handler";
 import { Stack } from "expo-router";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function RootLayout() {
   return (
