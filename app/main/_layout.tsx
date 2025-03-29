@@ -29,20 +29,21 @@ export default function RootLayout() {
         }}
       />
       <Tabs.Screen
+        name="user"
+        options={{
+          headerShown: false,
+          title: "Users",
+          tabBarIcon: (focused) => (
+            <MaterialIcons name="group" color="gray" size={24} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="setting"
         options={{
           title: "Setting",
           tabBarIcon: (focused) => (
             <MaterialIcons name="settings" color="gray" size={24} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="friend"
-        options={{
-          title: "Friend",
-          tabBarIcon: (focused) => (
-            <MaterialIcons name="group" color="gray" size={24} />
           ),
         }}
       />

@@ -7,7 +7,7 @@ import { PrimaryModal } from "@/components/organisms/primaryModal";
 import { usePost } from "@/hooks/usePost";
 
 const showPost = () => {
-  const { post_id } = useLocalSearchParams();
+  const { post_id, permission } = useLocalSearchParams();
   const [modalVisible, setModalVisible] = useState(false);
   const {
     updatePost,
@@ -73,27 +73,31 @@ const showPost = () => {
         onChangeText={onChangeTimeMin}
         className="border border-gray-400"
       />
-      <PrimaryButton
-        onPress={() => {
-          Keyboard.dismiss();
-          updatePost(post_id);
-        }}
-      >
-        Update
-      </PrimaryButton>
+      {permission === "editable" ? (
+        <>
+          <PrimaryButton
+            onPress={() => {
+              Keyboard.dismiss();
+              updatePost(post_id);
+            }}
+          >
+            Update
+          </PrimaryButton>
 
-      <PrimaryModal
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        onPress={() => deletePost(post_id)}
-      >
-        Delete
-      </PrimaryModal>
-      <View className="absolute w-full bottom-0">
-        <SecondaryButton onPress={() => setModalVisible(true)}>
-          Delete this post
-        </SecondaryButton>
-      </View>
+          <PrimaryModal
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+            onPress={() => deletePost(post_id)}
+          >
+            Delete
+          </PrimaryModal>
+          <View className="absolute w-full bottom-0">
+            <SecondaryButton onPress={() => setModalVisible(true)}>
+              Delete this post
+            </SecondaryButton>
+          </View>
+        </>
+      ) : null}
     </View>
   );
 };

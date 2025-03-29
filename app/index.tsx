@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { Text, View, Image } from "react-native";
 import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter, useFocusEffect } from "expo-router";
@@ -49,10 +49,19 @@ export default function Index() {
 
   if (fetchUserStatus === status.failed) {
     return (
-      <View className="flex-1 bg-blue-200">
+      <View className="flex-1 bg-blue-200 items-center">
         <Text className="color-white text-4xl text-center absolute w-full top-20">
           Social Fitness App
         </Text>
+        <Image
+          source={require("../assets/images/fitness_top_image.png")}
+          style={{
+            width: 250,
+            height: 150,
+            position: "absolute",
+            top: 200,
+          }}
+        />
         <View className="bg-white h-[250px] absolute bottom-0 w-full rounded-t-lg p-6">
           <Text className="text-center text-2xl mb-5">Welcome!</Text>
           <Text className="text-center text-lg">
