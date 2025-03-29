@@ -1,10 +1,10 @@
 // import "../global.css";
-import { router, Tabs } from "expo-router";
+import { Tabs } from "expo-router";
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { fetchUser } from "@/slices/api/userSlice";
-import { AppDispatch, RootState } from "../store";
+import { AppDispatch } from "../store";
 import { MaterialIcons } from "@expo/vector-icons";
 
 export default function RootLayout() {
@@ -31,9 +31,18 @@ export default function RootLayout() {
       <Tabs.Screen
         name="setting"
         options={{
-          title: "Home",
+          title: "Setting",
           tabBarIcon: (focused) => (
             <MaterialIcons name="settings" color="gray" size={24} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="friend"
+        options={{
+          title: "Friend",
+          tabBarIcon: (focused) => (
+            <MaterialIcons name="group" color="gray" size={24} />
           ),
         }}
       />

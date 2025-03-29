@@ -1,5 +1,6 @@
 // import "../global.css";
 import { Stack } from "expo-router";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export default function RootLayout() {
   return (
