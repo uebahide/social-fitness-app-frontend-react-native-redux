@@ -11,7 +11,7 @@ const Setting = () => {
   const user = useSelector((state: RootState) => state.user.value);
   const [modalVisible, setModalVisible] = useState(false);
   return (
-    <View className="gap-y-5 flex-1 mt-3">
+    <View className="gap-y-5 flex-1 pt-3  bg-blue-100">
       <Text className="border-b text-xl  color-gray-600">
         User Name &gt; {user.name}
       </Text>
