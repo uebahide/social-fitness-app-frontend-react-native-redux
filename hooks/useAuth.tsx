@@ -34,7 +34,7 @@ export const useAuth = () => {
       await AsyncStorage.setItem("token", res.data.token);
       setErrorMessage("");
       dispatch(fetchToken()).then(() => {
-        router.navigate("/main/home");
+        router.navigate("/main/home/indexPost");
       });
     } catch (error) {
       if (axios.isAxiosError(error)) {

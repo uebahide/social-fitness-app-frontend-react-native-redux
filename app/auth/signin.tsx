@@ -1,7 +1,7 @@
 import { PrimaryButton } from "@/components/atoms/buttons/primaryButton";
 
 import { useAuth } from "@/hooks/useAuth";
-import { Text, View, TextInput } from "react-native";
+import { Text, View, TextInput, Keyboard } from "react-native";
 
 const Signin = () => {
   const { email, password, setEmail, setPassword, errorMessage, authenticate } =
@@ -39,7 +39,12 @@ const Signin = () => {
 
       <View className="mt-10 items-center">
         <View className="w-64">
-          <PrimaryButton onPress={() => authenticate("login")}>
+          <PrimaryButton
+            onPress={() => {
+              Keyboard.dismiss();
+              authenticate("login");
+            }}
+          >
             Sign In
           </PrimaryButton>
         </View>
