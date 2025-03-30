@@ -11,8 +11,10 @@ export const usePost = () => {
   const [amount, setAmount] = useState<string>("");
   const [timeHour, setTimeHour] = useState<string>("");
   const [timeMinute, setTimeMinute] = useState<string>("");
-  const token = useSelector((state: RootState) => state.token.value);
+  const [friendPosts, setFriendPost] = useState<post[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const token = useSelector((state: RootState) => state.token.value);
 
   const fetchPost = async (post_id: string | string[]) => {
     try {
@@ -46,6 +48,41 @@ export const usePost = () => {
         setErrorMessage("An unexpected error occurred.");
       }
       return false;
+    }
+  };
+
+  const fetchFriendPosts = async (user_id: string | string[]) => {
+    try {
+      const res = await axios({
+        method: "get",
+        url: `${API_URL}/posts/friend/${user_id}`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // setSuccessMessage(res.data.message);
+      console.log("frined post: ", res.data);
+      setFriendPost(res.data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          console.log("Error response status:", error.response.status);
+          console.log("Error response data:", error.response.data);
+          console.log("Error response headers:", error.response.headers);
+          setErrorMessage(error.response.data.message);
+        } else if (error.request) {
+          console.log("Error request:", error.request);
+          setErrorMessage("server error");
+        } else {
+          console.log("Error message:", error.message);
+        }
+      } else if (error instanceof Error) {
+        console.error("General error:", error.message);
+        setErrorMessage(error.message);
+      } else {
+        console.error("Unknown error:", error);
+        setErrorMessage("An unexpected error occurred.");
+      }
     }
   };
 
@@ -174,6 +211,7 @@ export const usePost = () => {
 
   return {
     createPost,
+    fetchFriendPosts,
     updatePost,
     deletePost,
     fetchPost,
@@ -185,6 +223,7 @@ export const usePost = () => {
     setTimeHour,
     timeMinute,
     setTimeMinute,
+    friendPosts,
     errorMessage,
     setErrorMessage,
   };
