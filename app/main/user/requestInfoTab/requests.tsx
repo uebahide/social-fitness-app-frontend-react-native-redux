@@ -1,68 +1,28 @@
-import { RootState } from "@/app/store";
-import { PrimaryButton } from "@/components/atoms/buttons/primaryButton";
 import { UserCard } from "@/components/organisms/userCard";
-import { API_URL } from "@/constants";
-import { user } from "@/types/user";
-import axios from "axios";
+
 import { useFocusEffect } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
-import { FlatList, TextInput, View, Text } from "react-native";
-import { useSelector } from "react-redux";
+import { useCallback } from "react";
+import { FlatList, Text } from "react-native";
+import { useFriend } from "@/hooks/useFriend";
 
 const Requests = () => {
-  const [users, setUsers] = useState<user[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const token = useSelector((state: RootState) => state.token.value);
-
-  const fetchRequestSenders = async () => {
-    try {
-      const res = await axios({
-        method: "get",
-        url: `${API_URL}/requesters`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setUsers(res.data);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          console.log("Error response status:", error.response.status);
-          console.log("Error response data:", error.response.data);
-          console.log("Error response headers:", error.response.headers);
-          setErrorMessage(error.response.data.message);
-        } else if (error.request) {
-          console.log("Error request:", error.request);
-          setErrorMessage("server error");
-        } else {
-          console.log("Error message:", error.message);
-          setErrorMessage("");
-        }
-      } else if (error instanceof Error) {
-        console.error("General error:", error.message);
-        setErrorMessage(error.message);
-      } else {
-        console.error("Unknown error:", error);
-        setErrorMessage("An unexpected error occurred.");
-      }
-    }
-  };
+  const { fetchRequestSenders, requestSenders, errorMessage } = useFriend();
 
   useFocusEffect(
     useCallback(() => {
       fetchRequestSenders();
-      console.log("requests.tsx:", users);
+      console.log("requests.tsx:", requestSenders);
       return () => {};
-    }, [])
+    }, []),
   );
 
-  if (users.length == 0) {
+  if (requestSenders.length == 0) {
     return <Text className="text-center mt-10">No requests</Text>;
   }
 
   return (
     <FlatList
-      data={users}
+      data={requestSenders}
       renderItem={({ item }) => <UserCard user={item} />}
       keyExtractor={(item) => item.id}
     />

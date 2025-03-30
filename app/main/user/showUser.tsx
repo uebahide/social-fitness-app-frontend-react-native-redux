@@ -1,254 +1,35 @@
-import { RootState } from "@/app/store";
 import { PrimaryButton } from "@/components/atoms/buttons/primaryButton";
 import { SecondaryButton } from "@/components/atoms/buttons/secondaryButton";
 import { PostCard } from "@/components/organisms/postCard";
-import { API_URL } from "@/constants";
-import { post } from "@/types/post";
-import axios from "axios";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { View, Text, SafeAreaView, FlatList } from "react-native";
-import { useSelector } from "react-redux";
+import { usePost } from "@/hooks/usePost";
+import { useFriend } from "@/hooks/useFriend";
 
 const ShowUser = () => {
   const { user_id, user_name, user_email } = useLocalSearchParams();
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const [successMessage, setSuccessMessage] = useState<string>("");
-  const token = useSelector((state: RootState) => state.token.value);
-  const [requestStatus, setRequestStatus] = useState<string>("");
-  const [friendPosts, setFriendPost] = useState<post[]>([]);
   const [clicked, setClicked] = useState<boolean>(false);
 
-  const fetchFriendPosts = async () => {
-    try {
-      const res = await axios({
-        method: "get",
-        url: `${API_URL}/posts/friend/${user_id}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setSuccessMessage(res.data.message);
-      console.log("frined post: ", res.data);
-      setFriendPost(res.data);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          console.log("Error response status:", error.response.status);
-          console.log("Error response data:", error.response.data);
-          console.log("Error response headers:", error.response.headers);
-          setErrorMessage(error.response.data.message);
-        } else if (error.request) {
-          console.log("Error request:", error.request);
-          setErrorMessage("server error");
-        } else {
-          console.log("Error message:", error.message);
-        }
-      } else if (error instanceof Error) {
-        console.error("General error:", error.message);
-        setErrorMessage(error.message);
-      } else {
-        console.error("Unknown error:", error);
-        setErrorMessage("An unexpected error occurred.");
-      }
-    }
-  };
-
-  const SendFriendRequest = async () => {
-    try {
-      const res = await axios({
-        method: "post",
-        url: `${API_URL}/friend/request/${user_id}`,
-        data: {},
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setSuccessMessage(res.data.message);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          console.log("Error response status:", error.response.status);
-          console.log("Error response data:", error.response.data);
-          console.log("Error response headers:", error.response.headers);
-          setErrorMessage(error.response.data.message);
-        } else if (error.request) {
-          console.log("Error request:", error.request);
-          setErrorMessage("server error");
-        } else {
-          console.log("Error message:", error.message);
-        }
-      } else if (error instanceof Error) {
-        console.error("General error:", error.message);
-        setErrorMessage(error.message);
-      } else {
-        console.error("Unknown error:", error);
-        setErrorMessage("An unexpected error occurred.");
-      }
-    }
-  };
-
-  const acceptFriendRequest = async () => {
-    try {
-      const res = await axios({
-        method: "post",
-        url: `${API_URL}/friend/accept/${user_id}`,
-        data: {},
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setSuccessMessage(res.data.message);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          console.log("Error response status:", error.response.status);
-          console.log("Error response data:", error.response.data);
-          console.log("Error response headers:", error.response.headers);
-          setErrorMessage(error.response.data.message);
-        } else if (error.request) {
-          console.log("Error request:", error.request);
-          setErrorMessage("server error");
-        } else {
-          console.log("Error message:", error.message);
-        }
-      } else if (error instanceof Error) {
-        console.error("General error:", error.message);
-        setErrorMessage(error.message);
-      } else {
-        console.error("Unknown error:", error);
-        setErrorMessage("An unexpected error occurred.");
-      }
-    }
-  };
-
-  const rejectFriendRequest = async () => {
-    try {
-      const res = await axios({
-        method: "post",
-        url: `${API_URL}/friend/reject/${user_id}`,
-        data: {},
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setSuccessMessage(res.data.message);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          console.log("Error response status:", error.response.status);
-          console.log("Error response data:", error.response.data);
-          console.log("Error response headers:", error.response.headers);
-          setErrorMessage(error.response.data.message);
-        } else if (error.request) {
-          console.log("Error request:", error.request);
-          setErrorMessage("server error");
-        } else {
-          console.log("Error message:", error.message);
-        }
-      } else if (error instanceof Error) {
-        console.error("General error:", error.message);
-        setErrorMessage(error.message);
-      } else {
-        console.error("Unknown error:", error);
-        setErrorMessage("An unexpected error occurred.");
-      }
-    }
-  };
-
-  const unfriend = async () => {
-    try {
-      const res = await axios({
-        method: "post",
-        url: `${API_URL}/friend/unfriend/${user_id}`,
-        data: {},
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setSuccessMessage(res.data.message);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          console.log("Error response status:", error.response.status);
-          console.log("Error response data:", error.response.data);
-          console.log("Error response headers:", error.response.headers);
-          setErrorMessage(error.response.data.message);
-        } else if (error.request) {
-          console.log("Error request:", error.request);
-          setErrorMessage("server error");
-        } else {
-          console.log("Error message:", error.message);
-        }
-      } else if (error instanceof Error) {
-        console.error("General error:", error.message);
-        setErrorMessage(error.message);
-      } else {
-        console.error("Unknown error:", error);
-        setErrorMessage("An unexpected error occurred.");
-      }
-    }
-  };
-
-  const fetchRequestStatus = async () => {
-    try {
-      const res = await axios({
-        method: "get",
-        url: `${API_URL}/friend/status/${user_id}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setRequestStatus(res.data.status);
-      console.log(res.data);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          console.log("Error response status:", error.response.status);
-          console.log("Error response data:", error.response.data);
-          console.log("Error response headers:", error.response.headers);
-          setErrorMessage(error.response.data.message);
-        } else if (error.request) {
-          console.log("Error request:", error.request);
-          setErrorMessage("server error");
-        } else {
-          console.log("Error message:", error.message);
-          setErrorMessage("");
-        }
-      } else if (error instanceof Error) {
-        console.error("General error:", error.message);
-        setErrorMessage(error.message);
-      } else {
-        console.error("Unknown error:", error);
-        setErrorMessage("An unexpected error occurred.");
-      }
-    }
-  };
+  const { fetchFriendPosts, friendPosts } = usePost();
+  const {
+    SendFriendRequest,
+    fetchRequestStatus,
+    unfriend,
+    acceptFriendRequest,
+    rejectFriendRequest,
+    requestStatus,
+  } = useFriend();
 
   useFocusEffect(
     useCallback(() => {
-      fetchRequestStatus();
-      fetchFriendPosts();
-    }, [clicked])
+      fetchRequestStatus(user_id);
+      fetchFriendPosts(user_id);
+    }, [clicked]),
   );
-
-  // useEffect(() => {
-  //   fetchRequestStatus();
-  //   fetchFriendPosts();
-  // }, [clicked]);
 
   return (
     <>
-      {/* {errorMessage ? (
-        <Text className="color-red-600">{errorMessage}</Text>
-      ) : (
-        <></>
-      )}
-      {successMessage ? (
-        <Text className="color-green-600">{successMessage}</Text>
-      ) : (
-        <></>
-      )} */}
       <View className="rounded-lg items-center mb-2 py-10 bg-red-100">
         <Text>Name: {user_name}</Text>
         <Text>email: {user_email}</Text>
@@ -256,7 +37,7 @@ const ShowUser = () => {
       {requestStatus === "" || requestStatus === "rejected" ? (
         <PrimaryButton
           onPress={() => {
-            SendFriendRequest();
+            SendFriendRequest(user_id);
             setClicked(!clicked);
           }}
         >
@@ -267,7 +48,7 @@ const ShowUser = () => {
       ) : requestStatus === "accepted" ? (
         <SecondaryButton
           onPress={() => {
-            unfriend();
+            unfriend(user_id);
             setClicked(!clicked);
           }}
         >
@@ -277,7 +58,7 @@ const ShowUser = () => {
         <>
           <PrimaryButton
             onPress={() => {
-              acceptFriendRequest();
+              acceptFriendRequest(user_id);
               setClicked(!clicked);
             }}
           >
@@ -285,7 +66,7 @@ const ShowUser = () => {
           </PrimaryButton>
           <SecondaryButton
             onPress={() => {
-              rejectFriendRequest();
+              rejectFriendRequest(user_id);
               setClicked(!clicked);
             }}
           >
