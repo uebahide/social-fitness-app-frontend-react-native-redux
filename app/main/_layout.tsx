@@ -29,6 +29,16 @@ export default function RootLayout() {
         }}
       />
       <Tabs.Screen
+        name="chat"
+        options={{
+          headerShown: false,
+          title: "Chat",
+          tabBarIcon: (focused) => (
+            <MaterialIcons name="chat" color="gray" size={24} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="user"
         options={{
           headerShown: false,

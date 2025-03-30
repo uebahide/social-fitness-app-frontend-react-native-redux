@@ -6,11 +6,11 @@ const CreatePost = () => {
   const {
     createPost,
     title,
-    count,
+    amount,
     timeHour,
     timeMinute,
     setTitle,
-    setCount,
+    setAmount,
     setTimeHour,
     setTimeMinute,
     errorMessage,
@@ -19,8 +19,8 @@ const CreatePost = () => {
   const onChangeTitle = (s: string) => {
     setTitle(s);
   };
-  const onChangecount = (s: string) => {
-    setCount(s);
+  const onChangeAmount = (s: string) => {
+    setAmount(s);
   };
   const onChangeTimeHour = (s: string) => {
     setTimeHour(s);
@@ -42,9 +42,9 @@ const CreatePost = () => {
         className="border border-gray-400"
       />
       <TextInput
-        placeholder="Count"
-        value={count}
-        onChangeText={onChangecount}
+        placeholder="Amount"
+        value={amount}
+        onChangeText={onChangeAmount}
         className="border border-gray-400"
       />
       <TextInput

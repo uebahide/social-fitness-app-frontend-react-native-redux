@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 
 export const usePost = () => {
   const [title, setTitle] = useState<string>("");
-  const [count, setCount] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
   const [timeHour, setTimeHour] = useState<string>("");
   const [timeMinute, setTimeMinute] = useState<string>("");
   const token = useSelector((state: RootState) => state.token.value);
@@ -20,7 +20,7 @@ export const usePost = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTitle(res.data.title);
-      setCount(res.data.count);
+      setAmount(res.data.amount);
       setTimeHour(res.data.time_hour);
       setTimeMinute(res.data.time_minute);
       setErrorMessage("");
@@ -56,7 +56,7 @@ export const usePost = () => {
         url: `${API_URL}/posts`,
         data: {
           title: title,
-          count: count,
+          amount: amount,
           time_hour: timeHour,
           time_minute: timeMinute,
         },
@@ -99,7 +99,7 @@ export const usePost = () => {
         url: `${API_URL}/posts/${post_id}`,
         data: {
           title: title,
-          count: count,
+          amount: amount,
           time_hour: timeHour,
           time_minute: timeMinute,
         },
@@ -179,8 +179,8 @@ export const usePost = () => {
     fetchPost,
     title,
     setTitle,
-    count,
-    setCount,
+    amount,
+    setAmount,
     timeHour,
     setTimeHour,
     timeMinute,
