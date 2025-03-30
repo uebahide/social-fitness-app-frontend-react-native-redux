@@ -5,10 +5,12 @@ node_modules/
 
 # Expo
 .expo/
-.idea/
 dist/
 web-build/
 expo-env.d.ts
+
+# JetBrains IDEs
+.idea/
 
 # Native
 *.orig.*
