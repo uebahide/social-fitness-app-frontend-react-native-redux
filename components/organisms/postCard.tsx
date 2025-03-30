@@ -25,7 +25,7 @@ export const PostCard: FC<PostCardProps> = memo(({ post, permission }) => {
       <Pressable className="rounded-lg items-center mb-2 py-10 bg-green-100">
         <Text>Post date: {formattedDate}</Text>
         <Text>Title: {post.title}</Text>
-        <Text>Count/distance: {post.count}</Text>
+        <Text>Amount/Distance: {post.amount}</Text>
         <Text>Hour: {post.time_hour}</Text>
         <Text>Min: {post.time_minute}</Text>
       </Pressable>
@@ -43,7 +43,7 @@ export const PostCard: FC<PostCardProps> = memo(({ post, permission }) => {
       <Pressable className="rounded-lg items-center mb-2 py-10 bg-green-100">
         <Text>Post date: {formattedDate}</Text>
         <Text>Title: {post.title}</Text>
-        <Text>Count/distance: {post.count}</Text>
+        <Text>Amount/Distance: {post.amount}</Text>
         <Text>Hour: {post.time_hour}</Text>
         <Text>Min: {post.time_minute}</Text>
       </Pressable>

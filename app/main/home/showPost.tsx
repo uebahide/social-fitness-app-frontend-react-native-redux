@@ -14,11 +14,11 @@ const showPost = () => {
     deletePost,
     fetchPost,
     title,
-    count,
+    amount,
     timeHour,
     timeMinute,
     setTitle,
-    setCount,
+    setAmount,
     setTimeHour,
     setTimeMinute,
     errorMessage,
@@ -27,8 +27,8 @@ const showPost = () => {
   const onChangeTitle = (s: string) => {
     setTitle(s);
   };
-  const onChangecount = (s: string) => {
-    setCount(s);
+  const onChangeAmount = (s: string) => {
+    setAmount(s);
   };
   const onChangeTimeHour = (s: string) => {
     setTimeHour(s);
@@ -55,8 +55,8 @@ const showPost = () => {
       />
       <TextInput
         placeholder="Count"
-        value={count}
-        onChangeText={onChangecount}
+        value={amount}
+        onChangeText={onChangeAmount}
         className="border border-gray-400"
       />
       <TextInput

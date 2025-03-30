@@ -28,21 +28,21 @@ export default function Index() {
       const fetchData = async () => {
         await dispatch(fetchToken());
         await dispatch(fetchUser());
-        console.log("fetchUserStatus(index.tsx): ", fetchUserStatus);
-        console.log("token(index.tsx):", token);
+        console.log("fetchUserStatus(indexChat.tsx): ", fetchUserStatus);
+        console.log("token(indexChat.tsx):", token);
       };
       fetchData();
       return () => {
         // Do something when the screen is unfocused
         // Useful for cleanup functions
       };
-    }, [dispatch])
+    }, [dispatch]),
   );
 
   useEffect(() => {
     console.log("before go to home: ", fetchUserStatus);
     if (fetchUserStatus === status.succeeded) {
-      console.log("go to home(index.tsx)");
+      console.log("go to home(indexChat.tsx)");
       router.navigate("/main/home/indexPost");
     }
   }, [dispatch, fetchUserStatus]);
