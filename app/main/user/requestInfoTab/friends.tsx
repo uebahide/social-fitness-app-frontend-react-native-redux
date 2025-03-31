@@ -14,7 +14,6 @@ const Friends = () => {
   useFocusEffect(
     useCallback(() => {
       fetchFriends();
-      console.log("friends.tsx: ", friends);
     }, []),
   );
 

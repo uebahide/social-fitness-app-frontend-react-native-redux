@@ -11,7 +11,6 @@ const Requests = () => {
   useFocusEffect(
     useCallback(() => {
       fetchRequestSenders();
-      console.log("requests.tsx:", requestSenders);
       return () => {};
     }, []),
   );
