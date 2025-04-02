@@ -14,7 +14,7 @@ export const useUser = () => {
     try {
       const res = await axios({
         method: "get",
-        url: `${API_URL}/users/${name}`,
+        url: `${API_URL}/users/search/${name}`,
         headers: {
           Authorization: `Bearer ${token}`,
         },
