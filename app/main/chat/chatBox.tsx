@@ -1,23 +1,23 @@
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import { API_URL, PUSHER_APP_KEY, PUSHER_APP_CLUSTER} from "@/constants";
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js/react-native';
+import {useFocusEffect, useLocalSearchParams, useNavigation} from "expo-router";
 import {
   FlatList,
   Keyboard,
   KeyboardAvoidingView,
-  Platform,
+  Platform, Pressable,
   SafeAreaView,
   View,
 } from "react-native";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
-import Echo from "laravel-echo";
-import { API_URL, Host } from "@/constants";
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import { MessageInput } from "@/components/atoms/inputs/messageInput";
 import { Message } from "@/components/organisms/message";
-import Pusher from "pusher-js/react-native";
-
 import type { message } from "@/types/message";
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const ChatBox = () => {
   const navigation = useNavigation();
@@ -27,19 +27,26 @@ const ChatBox = () => {
 
   const token = useSelector((state: RootState) => state.token.value);
   const user = useSelector((state: RootState) => state.user.value);
-  const [rendered, setRendered] = useState(false);
   const { friend_id } = useLocalSearchParams();
   const user_id = user.id;
-  const webSocketChannel =
+  const chat_id =
     parseInt(user_id) < parseInt(friend_id.toString())
       ? `chat.${user_id}_${friend_id}`
       : `chat.${friend_id}_${user_id}`;
 
-  const echoRef = useRef<Echo<"reverb"> | null>(null);
+  const echoRef = useRef<Echo<"pusher"> | null>(null);
+  const flatListRef = useRef<FlatList>(null); // FlatList の ref を作成
+
+  const connectWebsocket = () => {
+      echoRef.current?.channel(chat_id).listen("GotMessage", async () => {
+        await getMessages()
+        scrollToBottom()
+      })
+  }
 
   const getMessages = async () => {
     try {
-      const m = await axios.get(`${API_URL}/messages/${friend_id}`, {
+      const m = await axios.get(`${API_URL}/messages/${chat_id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMessages(m.data);
@@ -81,84 +88,26 @@ const ChatBox = () => {
     },
   );
 
+  const scrollToBottom = () => {
+    flatListRef.current?.scrollToEnd({ animated: true });
+  };
+
   useEffect(() => {
     const parentNav = navigation.getParent(); // 親のTabNavigatorを取得
     if (parentNav) {
       parentNav.setOptions({ tabBarStyle: { display: "none" } });
     }
+    echoRef.current = new Echo({
+      broadcaster: 'pusher',
+      Pusher,
+      key: PUSHER_APP_KEY,
+      cluster: PUSHER_APP_CLUSTER,
+      forceTLS: true
+    });
+    getMessages();
+    connectWebsocket()
 
-    const createChannel = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/create_channel/${friend_id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        console.log(res.data);
-
-        if (!echoRef.current) {
-          const PusherClient = new Pusher("sahi8pur39cwfjorwtxq", {
-            wsHost: "http://192.168.1.6",
-            wsPort: 8080,
-            wssPort: 8080,
-            forceTLS: false,
-            enabledTransports: ["ws", "wss"],
-            disableStats: true,
-            cluster: "",
-          });
-
-          // Create Echo instance
-          echoRef.current = new Echo({
-            broadcaster: "reverb",
-            client: PusherClient,
-            auth: {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            },
-          });
-          console.log(echoRef.current.connector.pusher.connection.state);
-          echoRef.current
-            .private("chat.1_2")
-            .subscribed(() => {
-              console.log("Subscribed to chat.1_2");
-            })
-            .error((error) => {
-              console.error("❌ 接続エラー:", error);
-            })
-            .listen(".MessageSent", (e) => {
-              console.log("New message:", e);
-            });
-          echoRef.current
-            .private(webSocketChannel)
-            .listen("GotMessage", (e: any) => {
-              console.log("Received message:", e);
-              getMessages();
-            });
-        }
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          if (error.response) {
-            console.log("Error response status:", error.response.status);
-            console.log("Error response data:", error.response.data);
-            console.log("Error response headers:", error.response.headers);
-            setErrorMessage(error.response.data.message);
-          } else if (error.request) {
-            console.log("Error request:", error.request);
-            setErrorMessage("server error");
-          } else {
-            console.log("Error message:", error.message);
-            setErrorMessage("");
-          }
-        } else if (error instanceof Error) {
-          console.error("General error:", error.message);
-          setErrorMessage(error.message);
-        } else {
-          console.error("Unknown error:", error);
-          setErrorMessage("An unexpected error occurred.");
-        }
-      }
-    };
-
-    createChannel();
+    setTimeout(scrollToBottom, 1000)
 
     return () => {
       echoRef.current?.disconnect();
@@ -168,13 +117,19 @@ const ChatBox = () => {
       keyboardDidShowListener.remove();
       keyboardDidHideListener.remove();
     };
-  }, [messages, rendered]);
+  }, []);
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages]);
+
 
   if (Platform.OS === "android") {
     return (
       <SafeAreaView className="flex-1">
         <View className="flex-1 bg-blue-100">
           <FlatList
+            ref={flatListRef}
             data={messages}
             renderItem={({ item }) => (
               <Message message={item} user_id={user_id} />
@@ -185,9 +140,13 @@ const ChatBox = () => {
         <View>
           <MessageInput
             friend_id={friend_id.toString()}
-            setRendered={setRendered}
+            messages={messages}
+            setMessages={setMessages}
           />
         </View>
+        <Pressable className="mr-6 absolute left-[50%]" onPress={scrollToBottom}>
+          <AntDesign name="caretdown" size={24} color="gray"/>
+        </Pressable>
       </SafeAreaView>
     );
   } else if (Platform.OS === "ios") {
@@ -198,6 +157,7 @@ const ChatBox = () => {
       >
         <View className="flex-1 bg-blue-100">
           <FlatList
+            ref={flatListRef}
             data={messages}
             renderItem={({ item }) => (
               <Message message={item} user_id={user_id} />
@@ -208,10 +168,12 @@ const ChatBox = () => {
         <View className={isKeyboardVisible ? "h-[120px] bg-white" : ""}>
           <MessageInput
             friend_id={friend_id.toString()}
-            setRendered={setRendered}
+            messages={messages}
+            setMessages={setMessages}
           />
         </View>
       </KeyboardAvoidingView>
+
     );
   }
 };

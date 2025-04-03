@@ -19,8 +19,8 @@ export const useUser = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log(res.data)
       setUsers([...res.data]);
-      console.log(users);
       setErrorMessage("");
     } catch (error) {
       if (axios.isAxiosError(error)) {

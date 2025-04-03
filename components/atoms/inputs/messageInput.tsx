@@ -5,23 +5,30 @@ import { RootState } from "@/app/store";
 import { useSelector } from "react-redux";
 import { Platform, Pressable, Text, TextInput, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import {message} from "@/types/message";
 
 type propsType = {
   friend_id: string;
-  setRendered: Function;
+  messages: message[];
+  setMessages: Function;
 };
 
 export const MessageInput: FC<propsType> = (props) => {
-  const { friend_id, setRendered } = props;
-  const [message, setMessage] = useState("");
+  const { friend_id, messages, setMessages } = props;
+  const [text, setText] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [inputHeight, setInputHeight] = useState(42);
   const token = useSelector((state: RootState) => state.token.value);
+  const user_id = useSelector((state: RootState) => state.user.value.id);
+  const chat_id =
+      parseInt(user_id) < parseInt(friend_id.toString())
+          ? `chat.${user_id}_${friend_id}`
+          : `chat.${friend_id}_${user_id}`;
 
   const messageRequest = async (text: string) => {
     try {
-      await axios.post(
-        `${API_URL}/message/${friend_id}`,
+      const res = await axios.post(
+        `${API_URL}/message/${chat_id}`,
         {
           text,
         },
@@ -52,15 +59,23 @@ export const MessageInput: FC<propsType> = (props) => {
   };
 
   const sendMessage = () => {
-    if (message.trim() === "") {
+    if (text.trim() === "") {
       alert("Please enter a message!");
       return;
     }
+    const newMessage:message = {
+      id: NaN,
+      user_id: parseInt(user_id),
+      chat_id: chat_id,
+      text: text,
+      time: ""
+    }
 
-    messageRequest(message);
-    setMessage("");
-    setInputHeight(60);
-    setRendered(false);
+    const newMessages = [...messages, newMessage]
+    setMessages(newMessages)
+    messageRequest(text);
+    setText("");
+    setInputHeight(42);
   };
 
   if (Platform.OS === "android") {
@@ -70,8 +85,8 @@ export const MessageInput: FC<propsType> = (props) => {
         style={{ height: inputHeight + 12 }}
       >
         <TextInput
-          value={message}
-          onChangeText={(s: string) => setMessage(s)}
+          value={text}
+          onChangeText={(s: string) => setText(s)}
           className="border border-gray-400 rounded-md flex-1 mx-4"
           style={{ height: inputHeight }}
           multiline={true}
@@ -91,8 +106,8 @@ export const MessageInput: FC<propsType> = (props) => {
         style={{ height: 50 }}
       >
         <TextInput
-          value={message}
-          onChangeText={(s: string) => setMessage(s)}
+          value={text}
+          onChangeText={(s: string) => setText(s)}
           className="border border-gray-400 rounded-md flex-1 mx-4"
           style={{ height: 40 }}
           multiline={true}
