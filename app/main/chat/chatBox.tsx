@@ -1,4 +1,4 @@
-import { API_URL, PUSHER_APP_KEY, PUSHER_APP_CLUSTER} from "@/constants";
+import { API_URL} from "@/constants";
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js/react-native';
 import {useFocusEffect, useLocalSearchParams, useNavigation} from "expo-router";
@@ -97,11 +97,12 @@ const ChatBox = () => {
     if (parentNav) {
       parentNav.setOptions({ tabBarStyle: { display: "none" } });
     }
+    console.log(process.env.EXPO_PUBLIC_PUSHER_APP_KEY)
     echoRef.current = new Echo({
       broadcaster: 'pusher',
       Pusher,
-      key: PUSHER_APP_KEY,
-      cluster: PUSHER_APP_CLUSTER,
+      key: process.env.EXPO_PUBLIC_PUSHER_APP_KEY,
+      cluster: process.env.EXPO_PUBLIC_PUSHER_APP_CLUSTER,
       forceTLS: true
     });
     getMessages();
