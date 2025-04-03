@@ -28,8 +28,6 @@ export default function Index() {
       const fetchData = async () => {
         await dispatch(fetchToken());
         await dispatch(fetchUser());
-        console.log("fetchUserStatus(indexChat.tsx): ", fetchUserStatus);
-        console.log("token(indexChat.tsx):", token);
       };
       fetchData();
       return () => {
@@ -42,7 +40,6 @@ export default function Index() {
   useEffect(() => {
     console.log("before go to home: ", fetchUserStatus);
     if (fetchUserStatus === status.succeeded) {
-      console.log("go to home(indexChat.tsx)");
       router.navigate("/main/home/indexPost");
     }
   }, [dispatch, fetchUserStatus]);

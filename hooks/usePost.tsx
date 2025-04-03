@@ -61,7 +61,6 @@ export const usePost = () => {
         },
       });
       // setSuccessMessage(res.data.message);
-      console.log("frined post: ", res.data);
       setFriendPost(res.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
